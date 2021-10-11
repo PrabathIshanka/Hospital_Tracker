@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+  </head>
+  <body>
+   
+    <div class="hero">
+      <div class="form-box">
+        <div class="button-box">
+          <div id="btn"></div>
+          <button type="button" class="toggle-btn" onclick="login()">
+            Login
+          </button>
+          <button type="button" class="toggle-btn" onclick="signin()">
+            Signin
+          </button>
+        </div>
+        <!-- login form -->
+        <form id="login" class="input-group" action="Final_1.html">
+          <input
+            type="text"
+            class="input-field"
+            placeholder="User ID"
+            required
+          />
+          <!-- show pasword -->
+          <div class="visible-password">
+            <input
+              id="password-1"
+              type="password"
+              class="input-field"
+              placeholder="Password"
+              required
+            />
+            <span class="eye-on-1"
+              ><i
+                class="fa fa-eye"
+                aria-hidden="true"
+                id="eye-1"
+                onclick="toggle1()"
+              ></i>
+            </span>
+          </div>
+
+          <input type="checkbox" class="check-box" /><span
+            >Remember Password</span
+          >
+          <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+        <!-- register form -->
+        <form id="signin" class="input-group" action="Final_1.html">
+          <input
+            type="text"
+            class="input-field"
+            placeholder="User ID"
+            name="id"
+            required
+          />
+          <input
+            type="email"
+            class="input-field"
+            placeholder=" Email"
+            name="email"
+            required
+          />
+          <!-- show pasword -->
+          <div class="visible-password">
+            <input
+              id="password-2"
+              type="password"
+              class="input-field"
+              placeholder="Password"
+              name="reg-password1"
+              required
+            />
+            <span class="eye-on-2"
+              ><i
+                class="fa fa-eye"
+                aria-hidden="true"
+                id="eye-2"
+                onclick="toggle2()"
+              ></i>
+            </span>
+          </div>
+          <div class="visible-password">
+            <input
+              id="password-3"
+              type="password"
+              class="input-field"
+              placeholder="Confirm Password"
+              name="reg-password2"
+              required
+            />
+            <span class="eye-on-3"
+              ><i
+                class="fa fa-eye"
+                aria-hidden="true"
+                id="eye-3"
+                onclick="toggle3()"
+              ></i>
+            </span>
+          </div>
+          <input type="checkbox" class="check-box" /><span
+            >I agree to the terms and conditons</span
+          >
+          <button type="submit" class="submit-btn">Signin</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      var x = document.getElementById("login");
+      var y = document.getElementById("signin");
+      var z = document.getElementById("btn");
+      var state = false;
+
+      function signin() {
+        x.style.left = "-400px";
+        y.style.left = "50px";
+        z.style.left = "110px";
+      }
+      function login() {
+        x.style.left = "50px";
+        y.style.left = "450px";
+        z.style.left = "0px";
+      }
+      function toggle1() {
+        if (state) {
+          document
+            .getElementById("password-1")
+            .setAttribute("type", "password");
+          state = false;
+          document.getElementById("eye-1").style.color = "gray";
+        } else {
+          document.getElementById("password-1").setAttribute("type", "text");
+          state = true;
+          document.getElementById("eye-1").style.color = "#010fa3";
+        }
+      }
+      function toggle2() {
+        if (state) {
+          document
+            .getElementById("password-2")
+            .setAttribute("type", "password");
+          state = false;
+          document.getElementById("eye-2").style.color = "gray";
+        } else {
+          document.getElementById("password-2").setAttribute("type", "text");
+          state = true;
+          document.getElementById("eye-2").style.color = "#010fa3";
+        }
+      }
+      function toggle3() {
+        if (state) {
+          document
+            .getElementById("password-3")
+            .setAttribute("type", "password");
+          state = false;
+          document.getElementById("eye-3").style.color = "gray";
+        } else {
+          document.getElementById("password-3").setAttribute("type", "text");
+          state = true;
+          document.getElementById("eye-3").style.color = "#010fa3";
+        }
+      }
+    </script>
+  </body>
+</html>

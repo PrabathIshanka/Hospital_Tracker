@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <!-- JS, Popper.js, and jQuery -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <title>Covid-19 Test Centres</title>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrjIBPNrG9McCqaZx8IWt5VZMM6QPetjo&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <style type="text/css">
+      #map {
+        height: 90%;
+        width: 90%;
+        align-self: center;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .popup-bubble {
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: aliceblue;
+        transform: translate(-50%, -100%);
+
+        background-color: rgb(78, 58, 252);
+        padding: 5px;
+        border-radius: 5px;
+        font-family: sans-serif;
+        overflow-y: auto;
+        max-height: 60px;
+        box-shadow: 0px 2px 10px 1px rgba(0, 0, 0, 0.5);
+      }
+
+      .popup-bubble-anchor {
+        position: absolute;
+        width: 100%;
+        bottom: 8px;
+        left: 0;
+      }
+
+      .popup-bubble-anchor::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        transform: translate(-50%, 0);
+
+        width: 0;
+        height: 0;
+
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 8px solid rgb(78, 58, 252);
+      }
+
+      .popup-container {
+        cursor: auto;
+        height: 0;
+        position: absolute;
+
+        width: 200px;
+      }
+    </style>
+    <script>
+      let map, popup, Popup, popup1, popup2, popup3, popup4, popup5,popup6,popup7;
+      x = navigator.geolocation;
+      x.getCurrentPosition(myMap);
+
+      function myMap(position) {
+        var node = [
+          {
+            name: "Kandy Hospital",
+            lat: "7.28004",
+            lon: "80.6538",
+          },
+          {
+            name: "Colombo Hospital",
+            lat: "6.927079",
+            lon: "79.861244",
+          },
+          {
+            name: "Jaffna Hospital",
+            lat: "9.66845",
+            lon: "80.00742",
+          },
+          {
+            name: "Battaicaloa Hospital",
+            lat: "7.71667",
+            lon: "81.699997",
+          },
+          {
+            name: "Galle Hospital",
+            lat: "6.053519",
+            lon: "80.220978",
+          },
+          {
+            name: "Trincomalee Hospital",
+            lat: "8.592200",
+            lon: "81.196793",
+          },
+          {
+            name: "Kaluthara Hospital",
+            lat: "6.585395",
+            lon: "79.960739",
+          },
+           {
+            name: "Nugegoda Hospital",
+            lat: "6.8729",
+            lon: "79.888634",
+          },
+        ];
+
+        document.getElementById("content").innerHTML = node[0].name;
+        document.getElementById("content1").innerHTML = node[1].name;
+        document.getElementById("content2").innerHTML = node[2].name;
+        document.getElementById("content3").innerHTML = node[3].name;
+        document.getElementById("content4").innerHTML = node[4].name;
+        document.getElementById("content5").innerHTML = node[5].name;
+        document.getElementById("content6").innerHTML = node[6].name;
+        document.getElementById("content7").innerHTML = node[7].name;
+
+        var edge = [];
+
+        var myLat = position.coords.latitude;
+        var myLong = position.coords.longitude;
+
+        calDis = () => {
+          document.getElementById("btnNext").disabled = false;
+
+          for (var i = 0; i < node.length; i++) {  //harversin formular
+            lat1 = node[i].lat;
+            lon1 = node[i].lon;
+
+            lat2 = myLat;
+            lon2 = myLong;
+
+            const R = 6371e3; // earth radius metres
+            const φ1 = (lat1 * Math.PI) / 180; // φ, λ in radians
+            const φ2 = (lat2 * Math.PI) / 180;
+
+            const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+            const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+            const a =
+              Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const d = (R * c) / 1000; //in KM
+
+            edge.push({
+              name: node[i].name,
+              location: d,
+              lat: node[i].lat,
+              lon: node[i].lon,
+            });
+          }
+
+          edge.sort((x, y) => {
+            return x.location - y.location;
+          });
+
+          var count = 0;
+          const PlanCoordinates = [
+            {
+              lat: myLat,
+              lng: myLong,
+            },
+            {
+              lat: parseFloat(edge[0].lat),
+              lng: parseFloat(edge[0].lon),
+            },
+          ];
+
+          console.log(edge);
+
+          const shortPath = new google.maps.Polyline({
+            path: PlanCoordinates,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+          });
+            shortPath.setMap(map);
+           document.getElementById("btnGo").disabled = true;
+
+           nextLoc = () => {
+            document.getElementById("btnGo").disabled = true;
+             if(count < edge.length -1 ) {
+              count = count + 1;
+              const PlanCoordinates = [
+                {
+                  lat: myLat,
+                  lng: myLong,
+                },
+                {
+                  lat: parseFloat(edge[count].lat),
+                  lng: parseFloat(edge[count].lon),
+                },
+              ];
+              const shortPath = new google.maps.Polyline({
+                path: PlanCoordinates,
+                geodesic: true,
+                strokeColor: "black",
+                strokeOpacity: 1.0,
+                strokeWeight: 2,
+              });
+              shortPath.setMap(map);
+            } else {
+              alert("You have successfully visited all the Government Test Centres..!");
+            }
+          };
+
+          
+        };
+
+        var coords = new google.maps.LatLng(myLat, myLong);
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 5,
+          center: {
+            lat: myLat,
+            lng: myLong,
+          },
+          mapTypeId: "terrain",
+        });
+
+        var marker = new google.maps.Marker({ map: map, position: coords });
+
+        class Popup extends google.maps.OverlayView {
+          constructor(position, content) {
+            super();
+            this.position = position;
+            content.classList.add("popup-bubble");
+
+            const bubbleAnchor = document.createElement("div");
+            bubbleAnchor.classList.add("popup-bubble-anchor");
+            bubbleAnchor.appendChild(content);
+
+            this.containerDiv = document.createElement("div");
+            this.containerDiv.classList.add("popup-container");
+            this.containerDiv.appendChild(bubbleAnchor);
+
+            Popup.preventMapHitsAndGesturesFrom(this.containerDiv);
+          }
+
+          onAdd() {
+            this.getPanes().floatPane.appendChild(this.containerDiv);
+          }
+
+          onRemove() {
+            if (this.containerDiv.parentElement) {
+              this.containerDiv.parentElement.removeChild(this.containerDiv);
+            }
+          }
+
+          draw() {
+            const divPosition = this.getProjection().fromLatLngToDivPixel(
+              this.position
+            );
+
+            const display =
+              Math.abs(divPosition.x) < 4000 && Math.abs(divPosition.y) < 4000
+                ? "block"
+                : "none";
+
+            if (display === "block") {
+              this.containerDiv.style.left = divPosition.x + "px";
+              this.containerDiv.style.top = divPosition.y + "px";
+            }
+
+            if (this.containerDiv.style.display !== display) {
+              this.containerDiv.style.display = display;
+            }
+          }
+        }
+
+        popup = new Popup(
+          new google.maps.LatLng(7.28004,80.6538 ),
+          document.getElementById("content")
+        );
+        popup1 = new Popup(
+          new google.maps.LatLng(6.927079, 79.861244),
+          document.getElementById("content1")
+        );
+        popup2 = new Popup(
+          new google.maps.LatLng(9.66845, 80.00742),
+          document.getElementById("content2")
+        );
+        popup3 = new Popup(
+          new google.maps.LatLng(7.71667, 81.699997),
+          document.getElementById("content3")
+        );
+        popup4 = new Popup(
+          new google.maps.LatLng(6.053519, 80.220978),
+          document.getElementById("content4")
+        );
+
+        popup5 = new Popup(
+          new google.maps.LatLng(8.592200, 81.196793),
+          document.getElementById("content5")
+        );
+          popup6 = new Popup(
+          new google.maps.LatLng(6.585395, 79.960739),
+          document.getElementById("content6")
+        );
+          popup7 = new Popup(
+          new google.maps.LatLng(6.8729, 79.888634),
+          document.getElementById("content7")
+        );
+        popup.setMap(map);
+        popup1.setMap(map);
+        popup2.setMap(map);
+        popup3.setMap(map);
+        popup4.setMap(map);
+        popup5.setMap(map);
+        popup6.setMap(map);
+        popup7.setMap(map);
+      }
+
+      function resetMap() {
+        location.reload();
+      }
+    </script>
+  </head>
+
+  <body>
+    <table width="80%" height="100%" align="center">
+      <tr>
+        <td colspan="2" height="10%" class="card-header" align="center" >
+         
+            <b><h1 style="font-size:40px">Government Covid Test Centres</h1>
+              <p style="color: blue; font-size: 15px; font-style: italic; color: red; font-weight: normal; text-align: center;">
+                  To continue please give permission to access your current location</p>
+              <p style="color: blue; font-size: 15px; font-style: italic; color: red; font-weight: normal; text-align: center;">
+                  *Shortest path is indicated in Red</p>
+            
+
+              
+        </td>
+      </tr>
+
+      <tr>
+        <td
+          width="100%"
+          height="100%"
+          align="center"
+          style="background-color: #FFFFFF;"
+        >
+          <div id="map"></div>
+        </td>
+      </tr>
+      <tr>
+        <td
+          height="10%"
+          class="list-group list-group-flush"
+          style="background-color: #FFFFFF;"
+        >
+          <table width="80%" align="center" style="background-color: #FFFFFF;">
+            <tr>
+              <td>
+                <table width="80%" style="background-color: #FFFFFF;">
+                  <tr>
+                    <td>
+                      <input
+                        type="button"
+                        value="Find the nearest location"
+                        id="btnGo"                   
+                        onclick="calDis()"
+                        class="btn btn-outline-primary btn-lg btn-block"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="button"
+                        value="Next"
+                        id="btnNext"
+                        onclick="nextLoc()"
+                        class="btn btn-outline-success btn-lg btn-block"
+                        disabled
+                      />
+                    </td>
+                  </tr>
+                </table>
+              </td>
+
+              <td>
+                <input
+                  type="button"
+                  value="Start Again"
+                  id="btnReset"
+                  onclick="resetMap()"
+                  class="btn btn-warning btn-lg btn-block"
+                />
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" height="10%" class="card-header" align="center">
+          &nbsp;
+          <br />
+        </td>
+      </tr>
+      <marquee style="font-weight: bold;opacity: 0.5;color: black;"  behavior="scroll" direction="left">
+              Seek immediate medical attention if you have serious symptoms. Always call before visiting your doctor or health facility.
+            </marquee>
+    </table>
+    <marquee style="font-weight: bold;opacity: 0.5;color: black;"  behavior="scroll" direction="left">
+              Seek immediate medical attention if you have serious symptoms. Always call before visiting your doctor or health facility.
+            </marquee>
+
+    <br />
+    <br />
+    <!-- bojects -->
+    <div id="content"></div>
+    <div id="content1"></div>
+    <div id="content2"></div>
+    <div id="content3"></div>
+    <div id="content4"></div>
+    <div id="content5"></div>
+    <div id="content6"></div>
+    <div id="content7"></div>
+  </body>
+</html>
